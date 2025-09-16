@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema Solar Interativo - Sem câmera</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+</head>
+<body style="margin:0; overflow:hidden;">
+
+<a-scene>
+
+  <!-- Luz -->
+  <a-entity light="type: ambient; intensity: 0.5"></a-entity>
+  <a-entity light="type: directional; intensity: 0.8" position="0 4 4"></a-entity>
+
+  <!-- Sol (simulando o Hiro) -->
+  <a-sphere radius="0.5" color="#FFD700" position="0 1.6 -3"></a-sphere>
+
+  <!-- Texto informativo -->
+  <a-entity id="info" position="0 3 -3" text="value: Clique em um planeta; color: #FFFFFF; align: center;"></a-entity>
+
+  <!-- Planetas -->
+  <a-entity id="planetas"></a-entity>
+
+  <!-- Câmera -->
+  <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
+
+</a-scene>
+
+<script>
+const info = document.querySelector('#info');
+const planetasContainer = document.querySelector('#planetas');
+
+// Dados dos planetas com raio de órbita e velocidade
+const planetas = [
+  { nome: "Mercúrio", raio: 0.05, orbit: 1, speed: 0.03, cor:"#a9a9a9", info:"Diâmetro: 4.879 km\nDistância do Sol: 57,9 milhões km" },
+  { nome: "Vênus", raio: 0.12, orbit: 1.5, speed: 0.02, cor:"#f5deb3", info:"Diâmetro: 12.104 km\nDistância do Sol: 108,2 milhões km" },
+  { nome: "Terra", raio: 0.13, orbit: 2, speed: 0.015, cor:"#1e90ff", info:"Diâmetro: 12.742 km\nDistância do Sol: 149,6 milhões km" },
+  { nome: "Marte", raio: 0.07, orbit: 2.5, speed: 0.012, cor:"#ff4500", info:"Diâmetro: 6.779 km\nDistância do Sol: 227,9 milhões km" },
+  { nome: "Júpiter", raio: 0.3, orbit: 3.5, speed: 0.008, cor:"#f4a460", info:"Diâmetro: 139.820 km\nDistância do Sol: 778,5 milhões km" },
+  { nome: "Saturno", raio: 0.25, orbit: 4.5, speed: 0.006, cor:"#deb887", info:"Diâmetro: 116.460 km\nDistância do Sol: 1,43 bilhões km" },
+  { nome: "Urano", raio: 0.18, orbit: 5.5, speed: 0.004, cor:"#40e0d0", info:"Diâmetro: 50.724 km\nDistância do Sol: 2,87 bilhões km" },
+  { nome: "Netuno", raio: 0.17, orbit: 6.5, speed: 0.003, cor:"#4169e1", info:"Diâmetro: 49.244 km\nDistância do Sol: 4,5 bilhões km" },
+];
+
+// Criar planetas
+const planetasObjs = planetas.map(p => {
+  const el = document.createElement('a-sphere');
+  el.setAttribute('radius', p.raio);
+  el.setAttribute('color', p.cor);
+  el.setAttribute('position', `${p.orbit} 1.6 -3`);
+  el.classList.add('clickable');
+
+  // Evento de clique
+  el.addEventListener('click', () => {
+    el.setAttribute('color', '#' + Math.floor(Math.random()*16777215).toString(16));
+    info.setAttribute('text', 'value', `Planeta: ${p.nome}\n${p.info}`);
+  });
+
+  planetasContainer.appendChild(el);
+  return { el, ...p, angle: 0 };
+});
+
+// Animar órbitas
+function animate() {
+  planetasObjs.forEach(p => {
+    p.angle += p.speed;
+    const x = Math.cos(p.angle) * p.orbit;
+    const z = Math.sin(p.angle) * p.orbit - 3; // centraliza no Sol
+    p.el.setAttribute('position', `${x} 1.6 ${z}`);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Solar - marcador HIRO (A-Frame + AR.js)</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar.js"></script>
+  <style>body{margin:0; font-family: system-ui, sans-serif;} #help{position:fixed;left:8px;top:8px;background:rgba(0,0,0,0.5);color:#fff;padding:8px;border-radius:6px;z-index:999}</style>
+</head>
+<body>
+  <div id="help">Aponte a câmera para o marcador <strong>hiro</strong>. Toque/aperte para reconfigurar. (Compatível com Chrome/Firefox em dispositivos que suportam WebAR)</div>
+
+  <!-- A-Frame + AR.js scene -->
+  <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false;'>
+
+    <!-- Assets: texturas públicas (se algum link falhar, troque pelo seu arquivo local) -->
+    <a-assets>
+      <img id="tex-sun" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/sun.jpg" crossorigin="anonymous" />
+      <img id="tex-mercury" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/mercury.jpg" crossorigin="anonymous" />
+      <img id="tex-venus" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/venus.jpg" crossorigin="anonymous" />
+      <img id="tex-earth" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg" crossorigin="anonymous" />
+      <img id="tex-mars" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/mars_1024.jpg" crossorigin="anonymous" />
+      <img id="tex-jupiter" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/jupiter.jpg" crossorigin="anonymous" />
+      <img id="tex-saturn" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/saturn.jpg" crossorigin="anonymous" />
+      <img id="tex-uranus" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/uranus.jpg" crossorigin="anonymous" />
+      <img id="tex-neptune" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/neptune.jpg" crossorigin="anonymous" />
+      <img id="tex-moon" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/moon_1024.jpg" crossorigin="anonymous" />
+    </a-assets>
+
+    <!-- Marker (hiro) -->
+    <a-marker preset="hiro">
+
+      <!-- Centro: sol -->
+      <a-entity id="sol" position="0 0 0">
+        <a-sphere radius="0.5" segments-width="32" segments-height="32"
+                  material="src: #tex-sun; shader: standard; emissive: #ffd766; emissiveIntensity: 0.8; metalness: 0.1; roughness:0.5"
+                  animation="property: rotation; to: 0 360 0; loop: true; dur: 20000">
+        </a-sphere>
+      </a-entity>
+
+      <!-- Planetas: cada planeta fica dentro de um 'pivot' que gira (orbita) e tem o planeta deslocado no eixo X -->
+
+      <!-- Mercury -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+        <a-entity position="1 0 0">
+          <a-sphere radius="0.06" material="src:#tex-mercury; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Venus -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 12000">
+        <a-entity position="1.4 0 0">
+          <a-sphere radius="0.09" material="src:#tex-venus; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Earth + Moon -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 16000">
+        <a-entity position="1.9 0 0">
+          <a-sphere id="earth" radius="0.11" material="src:#tex-earth; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 6000"></a-sphere>
+
+          <!-- Moon orbit around Earth -->
+          <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 2000">
+            <a-entity position="0.22 0 0">
+              <a-sphere radius="0.03" material="src:#tex-moon; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 1500"></a-sphere>
+            </a-entity>
+          </a-entity>
+
+        </a-entity>
+      </a-entity>
+
+      <!-- Mars -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 20000">
+        <a-entity position="2.3 0 0">
+          <a-sphere radius="0.08" material="src:#tex-mars; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 7000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Jupiter -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 30000">
+        <a-entity position="3 0 0">
+          <a-sphere radius="0.25" material="src:#tex-jupiter; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 9000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Saturn (com anel) -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 38000">
+        <a-entity position="3.8 0 0">
+          <a-sphere radius="0.21" material="src:#tex-saturn; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-sphere>
+          <!-- Anel simples -->
+          <a-ring inner-radius="0.26" outer-radius="0.45" rotation="90 0 0" material="shader: flat; src: #tex-saturn; opacity:0.9"></a-ring>
+        </a-entity>
+      </a-entity>
+
+      <!-- Uranus -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 50000">
+        <a-entity position="4.6 0 0">
+          <a-sphere radius="0.16" material="src:#tex-uranus; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 12000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Neptune -->
+      <a-entity rotation="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 65000">
+        <a-entity position="5.2 0 0">
+          <a-sphere radius="0.15" material="src:#tex-neptune; shader: standard" animation="property: rotation; to: 0 360 0; loop: true; dur: 13000"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Pequena orientação para escala -->
+      <a-entity position="0 -0.8 0">
+        <a-plane width="6.5" height="0.02" rotation="-90 0 0" material="color:#222; opacity:0.4"></a-plane>
+      </a-entity>
+
+    </a-marker>
+
+    <!-- camera -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <!-- Dicas: trocar texturas, ajustar escala/velocidade -->
+  <!-- Salve este ficheiro como SistemaSolar_Hiro_AFrame.html e abra no seu navegador (recomendado: Chrome móvel) apontando a webcam para o marcador hiro. -->
+</body>
+</html>
